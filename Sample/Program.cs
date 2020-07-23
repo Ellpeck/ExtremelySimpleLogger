@@ -7,7 +7,7 @@ namespace Sample {
 
         private static void Main() {
             var logger = new Logger {
-                Name = "Test Logger",
+                Name = "Example Logger",
                 Sinks = {
                     new FileSink("Log.txt", true) {MinimumLevel = LogLevel.Trace},
                     new ConsoleSink()
