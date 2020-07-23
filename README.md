@@ -36,3 +36,5 @@ try {
     logger.Error("An exception was thrown", e);
 }
 ```
+
+For more information, you can also check out [the sample](https://github.com/Ellpeck/ExtremelySimpleLogger/blob/master/Sample/Program.cs).
