@@ -6,6 +6,7 @@ namespace ExtremelySimpleLogger {
     /// </summary>
     public class FileSink : Sink {
 
+        private const int OneGb = 1024 * 1024 * 1024;
         private readonly FileInfo file;
         private readonly StreamWriter writer;
         private readonly bool reopenOnWrite;
@@ -16,8 +17,9 @@ namespace ExtremelySimpleLogger {
         /// <param name="file">The full, or relative, path of the file to write to</param>
         /// <param name="append">Whether new output should be appended to the old log file</param>
         /// <param name="reopenOnWrite">Whether this file sink should reopen the file every time it logs to it. If this is false, the file will be kept open by this sink.</param>
-        public FileSink(string file, bool append, bool reopenOnWrite = false) :
-            this(new FileInfo(file), append, reopenOnWrite) {
+        /// <param name="fileSizeLimit">If <paramref name="append"/> is true, this property determines how big the log file has to be (in bytes) before it is deleted on startup. Defaults to 1gb.</param>
+        public FileSink(string file, bool append, bool reopenOnWrite = false, int fileSizeLimit = OneGb) :
+            this(new FileInfo(file), append, reopenOnWrite, fileSizeLimit) {
         }
 
         /// <summary>
@@ -26,7 +28,8 @@ namespace ExtremelySimpleLogger {
         /// <param name="file">The full, or relative, path of the file to write to</param>
         /// <param name="append">Whether new output should be appended to the old log file</param>
         /// <param name="reopenOnWrite">Whether this file sink should reopen the file every time it logs to it. If this is false, the file will be kept open by this sink.</param>
-        public FileSink(FileInfo file, bool append, bool reopenOnWrite = false) {
+        /// <param name="fileSizeLimit">If <paramref name="append"/> is true, this property determines how big the log file has to be (in bytes) before it is deleted on startup.</param>
+        public FileSink(FileInfo file, bool append, bool reopenOnWrite = false, int fileSizeLimit = OneGb) {
             this.reopenOnWrite = reopenOnWrite;
             this.file = file;
 
@@ -34,7 +37,7 @@ namespace ExtremelySimpleLogger {
             if (dir != null && !dir.Exists)
                 dir.Create();
 
-            if (!append && file.Exists)
+            if (file.Exists && (!append || file.Length >= fileSizeLimit))
                 file.Delete();
 
             if (!reopenOnWrite) {
