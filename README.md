@@ -1,7 +1,14 @@
 # ExtremelySimpleLogger
 **A very simple logger for .NET programs.**
 
-To set up an extremely simple logger, you have to create an instance of the `Logger` class:
+To set up an extremely simple logger, add a reference to the [NuGet package](https://www.nuget.org/packages/ExtremelySimpleLogger/) to your project file. Remember to change the `VERSION` to the most recent one.
+```xml
+<ItemGroup>
+    <PackageReference Include="ExtremelySimpleLogger" Version="VERSION" />
+</ItemGroup>
+```
+
+Next, you have to create an instance of the `Logger` class:
 ```cs
 var logger = new Logger {
     Name = "My Logger",
