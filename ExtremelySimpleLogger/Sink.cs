@@ -6,7 +6,7 @@ namespace ExtremelySimpleLogger {
     /// A sink is a way for log messages passed to a <see cref="Logger"/> to be processed in a certain way.
     /// By default, <see cref="FileSink"/> and <see cref="ConsoleSink"/> are available.
     /// </summary>
-    public abstract class Sink {
+    public abstract class Sink : IDisposable {
 
         /// <summary>
         /// The minimum level that a log message needs to have for it to be processed by this sink.
@@ -80,6 +80,12 @@ namespace ExtremelySimpleLogger {
         /// <param name="message">The message</param>
         /// <param name="e">An optional exception whose stack trace will be appended to the message</param>
         public delegate string LogFormatter(Logger logger, LogLevel level, object message, Exception e = null);
+
+        /// <summary>
+        /// Disposes this sink, freeing all of the resources it uses.
+        /// </summary>
+        public virtual void Dispose() {
+        }
 
     }
 }

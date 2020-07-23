@@ -56,5 +56,12 @@ namespace ExtremelySimpleLogger {
             }
         }
 
+        /// Disposes this sink, freeing all of the resources it uses.
+        public override void Dispose() {
+            base.Dispose();
+            if(!this.reopenOnWrite)
+                this.writer.Dispose();
+        }
+
     }
 }

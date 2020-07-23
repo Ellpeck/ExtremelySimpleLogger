@@ -8,7 +8,7 @@ namespace ExtremelySimpleLogger {
     /// To start logging with a logger, its <see cref="Sinks"/> need to be initialized.
     /// There are two default implementations: <see cref="FileSink"/>, <see cref="ConsoleSink"/> and <see cref="StringSink"/>.
     /// </summary>
-    public class Logger {
+    public class Logger : IDisposable {
 
         /// <summary>
         /// All of the <see cref="Sink"/> instances that this logger logs to.
@@ -90,6 +90,14 @@ namespace ExtremelySimpleLogger {
         /// <param name="message">The message</param>
         /// <param name="e">An optional exception whose stack trace will be appended to the message</param>
         public void Fatal(object message, Exception e = null) => this.Log(LogLevel.Fatal, message, e);
+
+        /// <summary>
+        /// Disposes this logger, freeing all of the resources associated with its <see cref="Sinks"/>.
+        /// </summary>
+        public void Dispose() {
+            foreach (var sink in this.Sinks)
+                sink.Dispose();
+        }
 
     }
 }

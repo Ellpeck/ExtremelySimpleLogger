@@ -36,6 +36,9 @@ namespace Sample {
 
             logger.Log(LogLevel.Trace, "This is a message that only the file sink will receive, since its minimum level is lower.");
             logger.Log(LogLevel.Info, "The program finished.");
+
+            // Once we're done using the logger, we can dispose it so that our FileSink instances free their files
+            logger.Dispose();
         }
 
     }
