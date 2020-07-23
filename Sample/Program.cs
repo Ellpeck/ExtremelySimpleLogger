@@ -5,11 +5,11 @@ using ExtremelySimpleLogger;
 namespace Sample {
     internal static class Program {
 
-        private static void Main(string[] args) {
+        private static void Main() {
             var logger = new Logger {
                 Name = "Test Logger",
                 Sinks = {
-                    new FileSink("Log.txt", true) {MinimumLevel = LogLevel.Trace}, 
+                    new FileSink("Log.txt", true) {MinimumLevel = LogLevel.Trace},
                     new ConsoleSink()
                 }
             };
@@ -23,7 +23,8 @@ namespace Sample {
                 logger.Error("An exception was thrown!", e);
             }
 
-            logger.Log(LogLevel.Trace, "The program finished.");
+            logger.Log(LogLevel.Trace, "This is a message that only the file sink will receive, since its minimum level is lower.");
+            logger.Log(LogLevel.Info, "The program finished.");
         }
 
     }
