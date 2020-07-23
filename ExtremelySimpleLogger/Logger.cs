@@ -6,13 +6,13 @@ namespace ExtremelySimpleLogger {
     /// The implementation of a logger, which is a wrapper class around multiple logging <see cref="Sinks"/>.
     ///
     /// To start logging with a logger, its <see cref="Sinks"/> need to be initialized.
-    /// There are two default implementations: <see cref="FileSink"/> and <see cref="ConsoleSink"/>.
+    /// There are two default implementations: <see cref="FileSink"/>, <see cref="ConsoleSink"/> and <see cref="StringSink"/>.
     /// </summary>
     public class Logger {
 
         /// <summary>
         /// All of the <see cref="Sink"/> instances that this logger logs to.
-        /// By default, <see cref="FileSink"/> and <see cref="ConsoleSink"/> are available.
+        /// By default, <see cref="FileSink"/>, <see cref="ConsoleSink"/> and <see cref="StringSink"/> are available.
         /// </summary>
         public List<Sink> Sinks { get; set; } = new List<Sink>();
         /// <summary>
