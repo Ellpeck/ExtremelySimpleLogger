@@ -68,7 +68,7 @@ namespace ExtremelySimpleLogger {
             builder.Append(message);
             // stack trace
             if (e != null)
-                builder.Append($"\n{e.StackTrace}");
+                builder.Append($"\n{e}");
             return builder.ToString();
         }
 
