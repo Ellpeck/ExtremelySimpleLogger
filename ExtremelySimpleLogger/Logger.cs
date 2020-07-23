@@ -4,9 +4,7 @@ using System.Collections.Generic;
 namespace ExtremelySimpleLogger {
     /// <summary>
     /// The implementation of a logger, which is a wrapper class around multiple logging <see cref="Sinks"/>.
-    ///
     /// To start logging with a logger, its <see cref="Sinks"/> need to be initialized.
-    /// There are two default implementations: <see cref="FileSink"/>, <see cref="ConsoleSink"/> and <see cref="StringSink"/>.
     /// </summary>
     public class Logger : IDisposable {
 

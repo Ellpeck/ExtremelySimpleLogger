@@ -4,7 +4,6 @@ using System.Text;
 namespace ExtremelySimpleLogger {
     /// <summary>
     /// A sink is a way for log messages passed to a <see cref="Logger"/> to be processed in a certain way.
-    /// By default, <see cref="FileSink"/> and <see cref="ConsoleSink"/> are available.
     /// </summary>
     public abstract class Sink : IDisposable {
 
