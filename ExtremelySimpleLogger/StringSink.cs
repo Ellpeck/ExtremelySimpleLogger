@@ -12,14 +12,20 @@ namespace ExtremelySimpleLogger {
         /// The string that this sink currently contains.
         /// Can be cleared using <see cref="Clear"/>.
         /// </summary>
-        public string Value => this.builder.ToString();
+        public string Value {
+            get {
+                lock (this.builder)
+                    return this.builder.ToString();
+            }
+        }
 
         /// <summary>
         /// Logs the given message, which has already been formatted using <see cref="Sink.Formatter"/>.
         /// </summary>
         /// <param name="s">The message to log</param>
         public override void Log(string s) {
-            this.builder.AppendLine(s);
+            lock (this.builder)
+                this.builder.AppendLine(s);
         }
 
         /// <summary>
@@ -27,7 +33,8 @@ namespace ExtremelySimpleLogger {
         /// After this call, <see cref="Value"/> will be empty.
         /// </summary>
         public void Clear() {
-            this.builder.Clear();
+            lock (this.builder)
+                this.builder.Clear();
         }
 
     }

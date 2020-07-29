@@ -51,11 +51,13 @@ namespace ExtremelySimpleLogger {
         /// </summary>
         /// <param name="s">The message to log</param>
         public override void Log(string s) {
-            if (this.reopenOnWrite) {
-                using (var w = this.file.AppendText())
-                    w.WriteLine(s);
-            } else {
-                this.writer.WriteLine(s);
+            lock (this.file) {
+                if (this.reopenOnWrite) {
+                    using (var w = this.file.AppendText())
+                        w.WriteLine(s);
+                } else {
+                    this.writer.WriteLine(s);
+                }
             }
         }
 
@@ -64,8 +66,10 @@ namespace ExtremelySimpleLogger {
         /// </summary>
         public override void Dispose() {
             base.Dispose();
-            if (!this.reopenOnWrite)
-                this.writer.Dispose();
+            lock (this.file) {
+                if (!this.reopenOnWrite)
+                    this.writer.Dispose();
+            }
         }
 
     }
