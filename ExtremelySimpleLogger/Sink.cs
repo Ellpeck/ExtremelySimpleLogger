@@ -32,14 +32,16 @@ namespace ExtremelySimpleLogger {
         /// <param name="message">The message</param>
         /// <param name="e">An optional exception whose stack trace will be appended to the message</param>
         public virtual void Log(Logger logger, LogLevel level, object message, Exception e = null) {
-            this.Log(this.Formatter.Invoke(logger, level, message, e));
+            this.Log(logger, level, this.Formatter.Invoke(logger, level, message, e));
         }
 
         /// <summary>
         /// Logs the given message, which has already been formatted using <see cref="Formatter"/>.
         /// </summary>
+        /// <param name="logger">The logger that the message was passed to</param>
+        /// <param name="level">The importance level of this message</param>
         /// <param name="s">The message to log</param>
-        public abstract void Log(string s);
+        protected abstract void Log(Logger logger, LogLevel level, string s);
 
         /// <summary>
         /// The default formatter for logging messages.
@@ -54,7 +56,7 @@ namespace ExtremelySimpleLogger {
         /// <param name="message">The message</param>
         /// <param name="e">An optional exception whose stack trace will be appended to the message</param>
         /// <returns>A formatted string to log</returns>
-        public virtual string FormatDefault(Logger logger, LogLevel level, object message, Exception e = null) {
+        protected virtual string FormatDefault(Logger logger, LogLevel level, object message, Exception e = null) {
             var builder = new StringBuilder();
             // date
             builder.Append($"[{DateTime.Now}] ");

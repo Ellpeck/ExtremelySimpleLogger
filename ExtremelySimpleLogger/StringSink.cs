@@ -22,8 +22,10 @@ namespace ExtremelySimpleLogger {
         /// <summary>
         /// Logs the given message, which has already been formatted using <see cref="Sink.Formatter"/>.
         /// </summary>
+        /// <param name="logger">The logger that the message was passed to</param>
+        /// <param name="level">The importance level of this message</param>
         /// <param name="s">The message to log</param>
-        public override void Log(string s) {
+        protected override void Log(Logger logger, LogLevel level, string s) {
             lock (this.builder)
                 this.builder.AppendLine(s);
         }
