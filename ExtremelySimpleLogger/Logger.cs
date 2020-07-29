@@ -45,7 +45,7 @@ namespace ExtremelySimpleLogger {
             if (!this.IsEnabled || level < this.MinimumLevel)
                 return;
             foreach (var sink in this.Sinks) {
-                if (level >= sink.MinimumLevel)
+                if (sink.IsEnabled && level >= sink.MinimumLevel)
                     sink.Log(this, level, message, e);
             }
         }

@@ -16,6 +16,10 @@ namespace ExtremelySimpleLogger {
         /// By default, <see cref="FormatDefault"/> is used.
         /// </summary>
         public LogFormatter Formatter { get; set; }
+        /// <summary>
+        /// If this property is set to <code>false</code>, this sink will not log any messages.
+        /// </summary>
+        public bool IsEnabled { get; set; } = true;
 
         /// <summary>
         /// Initializes a new sink with the default settings.
