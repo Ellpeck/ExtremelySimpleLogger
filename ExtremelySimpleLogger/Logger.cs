@@ -10,7 +10,7 @@ namespace ExtremelySimpleLogger {
 
         /// <summary>
         /// All of the <see cref="Sink"/> instances that this logger logs to.
-        /// By default, <see cref="FileSink"/>, <see cref="ConsoleSink"/> and <see cref="StringSink"/> are available.
+        /// By default, <see cref="FileSink"/>, <see cref="ConsoleSink"/>, <see cref="DirectorySink"/> and <see cref="StringSink"/> are available.
         /// </summary>
         public List<Sink> Sinks { get; set; } = new List<Sink>();
         /// <summary>
