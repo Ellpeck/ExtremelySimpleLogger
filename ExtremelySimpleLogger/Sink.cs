@@ -10,7 +10,7 @@ namespace ExtremelySimpleLogger {
         /// <summary>
         /// The minimum level that a log message needs to have for it to be processed by this sink.
         /// </summary>
-        public LogLevel MinimumLevel { get; set; } = LogLevel.Info;
+        public LogLevel MinimumLevel { get; set; } = LogLevel.Trace;
         /// <summary>
         /// The <see cref="LogFormatter"/> with which this message should be formatted.
         /// By default, <see cref="FormatDefault"/> is used.

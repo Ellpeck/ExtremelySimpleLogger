@@ -10,9 +10,9 @@ namespace Sample {
             // When we have multiple loggers that output to the same file,
             // we can just reuse our sinks
             var sinks = new List<Sink> {
-                // We want to log messages of every log level, so we set the minimum level to Trace
-                new FileSink("Log.txt", true) {MinimumLevel = LogLevel.Trace},
-                new ConsoleSink()
+                new FileSink("Log.txt", true),
+                // We only want to log messages with a higher importance in the console
+                new ConsoleSink {MinimumLevel = LogLevel.Info}
             };
             var logger = new Logger {
                 Name = "Example Logger",

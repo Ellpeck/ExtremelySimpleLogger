@@ -12,6 +12,6 @@
         <PackageProjectUrl>https://github.com/Ellpeck/ExtremelySimpleLogger</PackageProjectUrl>
         <RepositoryUrl>https://github.com/Ellpeck/ExtremelySimpleLogger</RepositoryUrl>
         <PackageLicenseUrl>https://github.com/Ellpeck/ExtremelySimpleLogger/blob/master/LICENSE</PackageLicenseUrl>
-        <VersionPrefix>1.2.0</VersionPrefix>
+        <VersionPrefix>1.2.1</VersionPrefix>
     </PropertyGroup>
 </Project>
