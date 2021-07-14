@@ -24,12 +24,14 @@ namespace ExtremelySimpleLogger {
         /// </summary>
         /// <param name="level">The log level to set the color for</param>
         /// <param name="color">The color to use, or a <see cref="Nullable{ConsoleColor}"/> with no value to clear the current color</param>
-        public virtual void SetColor(LogLevel level, ConsoleColor? color) {
+        /// <returns>This instance, for chaining</returns>
+        public virtual ConsoleSink SetColor(LogLevel level, ConsoleColor? color) {
             if (color.HasValue) {
                 this.ConsoleColors[level] = color.Value;
             } else {
                 this.ConsoleColors.Remove(level);
             }
+            return this;
         }
 
         /// <summary>
@@ -52,11 +54,11 @@ namespace ExtremelySimpleLogger {
         /// <param name="s">The message to log</param>
         protected override void Log(Logger logger, LogLevel level, string s) {
             lock (this.locker) {
-                var hasColor = this.ConsoleColors.TryGetValue(level, out var color);
-                if (hasColor)
-                    Console.ForegroundColor = color;
+                var color = this.GetColor(level);
+                if (color.HasValue)
+                    Console.ForegroundColor = color.Value;
                 Console.WriteLine(s);
-                if (hasColor)
+                if (color.HasValue)
                     Console.ResetColor();
             }
         }
