@@ -11,7 +11,7 @@
         <PackageTags>logging logger utility debug trace output file</PackageTags>
         <PackageProjectUrl>https://github.com/Ellpeck/ExtremelySimpleLogger</PackageProjectUrl>
         <RepositoryUrl>https://github.com/Ellpeck/ExtremelySimpleLogger</RepositoryUrl>
-        <PackageLicenseUrl>https://github.com/Ellpeck/ExtremelySimpleLogger/blob/master/LICENSE</PackageLicenseUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <VersionPrefix>1.2.3</VersionPrefix>
     </PropertyGroup>
 </Project>

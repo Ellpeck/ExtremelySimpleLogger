@@ -39,4 +39,4 @@ try {
 }
 ```
 
-For more information, you can also check out [the sample](https://github.com/Ellpeck/ExtremelySimpleLogger/blob/master/Sample/Program.cs).
+For more information, you can also check out [the sample](https://github.com/Ellpeck/ExtremelySimpleLogger/blob/main/Sample/Program.cs).
