@@ -7,9 +7,8 @@ namespace ExtremelySimpleLogger {
     /// </summary>
     public class StringSink : Sink {
 
-        private readonly StringBuilder builder = new StringBuilder();
         /// <summary>
-        /// The string that this sink currently contains.
+        /// The string that this sink currently contains, constructed from the underlying <see cref="StringBuilder"/>.
         /// Can be cleared using <see cref="Clear"/>.
         /// </summary>
         public string Value {
@@ -18,6 +17,18 @@ namespace ExtremelySimpleLogger {
                     return this.builder.ToString();
             }
         }
+        /// <summary>
+        /// The <see cref="StringBuilder"/> used to collect logged data from this sink.
+        /// To get its value directly, you can use <see cref="Value"/>.
+        /// </summary>
+        public StringBuilder StringBuilder {
+            get {
+                lock (this.builder)
+                    return this.builder;
+            }
+        }
+
+        private readonly StringBuilder builder = new StringBuilder();
 
         /// <summary>
         /// Logs the given message, which has already been formatted using <see cref="Sink.Formatter"/>.
