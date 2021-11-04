@@ -36,24 +36,32 @@ namespace ExtremelySimpleLogger {
         public DirectorySink(DirectoryInfo directory, int maxFiles = 10, bool reopenOnWrite = false, string dateFormat = DefaultDateFormat) {
             this.reopenOnWrite = reopenOnWrite;
 
-            if (!directory.Exists)
-                directory.Create();
+            try {
+                if (!directory.Exists)
+                    directory.Create();
+            } catch (Exception e) {
+                throw new IOException($"Failed to create directory sink directory {directory}", e);
+            }
 
-            // delete old files
-            var files = directory.GetFiles();
-            if (files.Length >= maxFiles) {
-                // order files by their creation time so that older files are deleted first
-                var ordered = files.OrderBy(f => f.CreationTime).ToList();
-                while (ordered.Count >= maxFiles) {
-                    ordered[0].Delete();
-                    ordered.RemoveAt(0);
+            try {
+                // delete old files
+                var files = directory.GetFiles();
+                if (files.Length >= maxFiles) {
+                    // order files by their creation time so that older files are deleted first
+                    var ordered = files.OrderBy(f => f.CreationTime).ToList();
+                    while (ordered.Count >= maxFiles) {
+                        ordered[0].Delete();
+                        ordered.RemoveAt(0);
+                    }
                 }
+            } catch (Exception e) {
+                throw new IOException($"Failed to delete old files in directory sink {directory}", e);
             }
 
             var date = DateTime.Now.ToString(dateFormat);
             this.file = new FileInfo(Path.Combine(directory.FullName, $"{date}.txt"));
             if (!reopenOnWrite) {
-                this.writer = this.file.AppendText();
+                this.writer = this.Append();
                 this.writer.AutoFlush = true;
             }
         }
@@ -67,7 +75,7 @@ namespace ExtremelySimpleLogger {
         protected override void Log(Logger logger, LogLevel level, string s) {
             lock (this.file) {
                 if (this.reopenOnWrite) {
-                    using (var w = this.file.AppendText())
+                    using (var w = this.Append())
                         w.WriteLine(s);
                 } else {
                     this.writer.WriteLine(s);
@@ -83,6 +91,14 @@ namespace ExtremelySimpleLogger {
             lock (this.file) {
                 if (!this.reopenOnWrite)
                     this.writer.Dispose();
+            }
+        }
+
+        private StreamWriter Append() {
+            try {
+                return this.file.AppendText();
+            } catch (Exception e) {
+                throw new IOException($"Failed to append to directory sink file {this.file}", e);
             }
         }
 

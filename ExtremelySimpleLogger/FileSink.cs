@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 namespace ExtremelySimpleLogger {
@@ -33,15 +34,23 @@ namespace ExtremelySimpleLogger {
             this.reopenOnWrite = reopenOnWrite;
             this.file = file;
 
-            var dir = file.Directory;
-            if (dir != null && !dir.Exists)
-                dir.Create();
+            try {
+                var dir = file.Directory;
+                if (dir != null && !dir.Exists)
+                    dir.Create();
+            } catch (Exception e) {
+                throw new IOException($"Failed to create directory for file sink {file}", e);
+            }
 
-            if (file.Exists && (!append || file.Length >= fileSizeLimit))
-                file.Delete();
+            try {
+                if (file.Exists && (!append || file.Length >= fileSizeLimit))
+                    file.Delete();
+            } catch (Exception e) {
+                throw new IOException($"Failed to delete file sink file {file}", e);
+            }
 
             if (!reopenOnWrite) {
-                this.writer = file.AppendText();
+                this.writer = this.Append();
                 this.writer.AutoFlush = true;
             }
         }
@@ -55,7 +64,7 @@ namespace ExtremelySimpleLogger {
         protected override void Log(Logger logger, LogLevel level, string s) {
             lock (this.file) {
                 if (this.reopenOnWrite) {
-                    using (var w = this.file.AppendText())
+                    using (var w = this.Append())
                         w.WriteLine(s);
                 } else {
                     this.writer.WriteLine(s);
@@ -71,6 +80,14 @@ namespace ExtremelySimpleLogger {
             lock (this.file) {
                 if (!this.reopenOnWrite)
                     this.writer.Dispose();
+            }
+        }
+
+        private StreamWriter Append() {
+            try {
+                return this.file.AppendText();
+            } catch (Exception e) {
+                throw new IOException($"Failed to append to file sink {this.file}", e);
             }
         }
 
