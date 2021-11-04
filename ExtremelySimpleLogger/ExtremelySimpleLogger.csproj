@@ -1,10 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
+    
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
-
+    
     <PropertyGroup>
         <Authors>Ellpeck</Authors>
         <Description>A very simple logger for .NET programs</Description>
@@ -12,6 +12,13 @@
         <PackageProjectUrl>https://github.com/Ellpeck/ExtremelySimpleLogger</PackageProjectUrl>
         <RepositoryUrl>https://github.com/Ellpeck/ExtremelySimpleLogger</RepositoryUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageIcon>Logo.png</PackageIcon>
         <VersionPrefix>1.2.3</VersionPrefix>
     </PropertyGroup>
+    
+    <ItemGroup>
+        <None Include="../README.md" Pack="true" PackagePath="" />
+        <None Include="../Logo.png" Pack="true" PackagePath="" />
+    </ItemGroup>
 </Project>

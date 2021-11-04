@@ -1,5 +1,6 @@
-# ExtremelySimpleLogger
-**A very simple logger for .NET programs.**
+![The ExtremelySimpleLogger logo](https://raw.githubusercontent.com/Ellpeck/ExtremelySimpleLogger/main/Logo.png)
+
+**ExtremelySimpleLogger** is a very simple logger for .NET programs.
 
 To set up an extremely simple logger, add a reference to the [NuGet package](https://www.nuget.org/packages/ExtremelySimpleLogger/) to your project file. Remember to change the `VERSION` to the most recent one.
 ```xml
