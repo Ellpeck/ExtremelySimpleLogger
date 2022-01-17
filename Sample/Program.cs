@@ -12,7 +12,9 @@ namespace Sample {
             var sinks = new List<Sink> {
                 new FileSink("Log.txt", true),
                 // We only want to log messages with a higher importance in the console
-                new ConsoleSink {MinimumLevel = LogLevel.Info}
+                new ConsoleSink {MinimumLevel = LogLevel.Info},
+                // we allow a total of 5 files in our directory sink before old ones start being deleted
+                new DirectorySink("AllLogs", 5)
             };
             var logger = new Logger {
                 Name = "Example Logger",

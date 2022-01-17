@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -9,6 +10,26 @@ namespace ExtremelySimpleLogger {
     /// Additionally, this sink will automatically delete the oldest log files if the amount of files exceeds a set limit.
     /// </summary>
     public class DirectorySink : Sink {
+
+        /// <summary>
+        /// The set of old files that are currently in the directory that this sink is referencing, and that have not been deleted on construction.
+        /// The files in this list are ordered by creation date in ascending order, meaning that the first entry is the least recently created one.
+        /// Note that this collection does not contain the <see cref="CurrentFile"/>.
+        /// </summary>
+        public readonly IList<FileInfo> OldFiles;
+        /// <summary>
+        /// The <see cref="DirectoryInfo"/> that this sink is currently using as its destination to store the <see cref="OldFiles"/> and <see cref="CurrentFile"/>.
+        /// </summary>
+        public readonly DirectoryInfo Directory;
+        /// <summary>
+        /// The <see cref="FileInfo"/> that this sink is currently using as its destination.
+        /// </summary>
+        public FileInfo CurrentFile {
+            get {
+                lock (this.file)
+                    return this.file;
+            }
+        }
 
         private const string DefaultDateFormat = "yy-MM-dd_HH-mm-ss";
         private readonly FileInfo file;
@@ -23,8 +44,7 @@ namespace ExtremelySimpleLogger {
         /// <param name="reopenOnWrite">Whether this sink should reopen the file every time it logs to it. If this is false, the file will be kept open by this sink.</param>
         /// <param name="dateFormat">The way the name of the current log file gets formatted. <code>yy-MM-dd_HH-mm-ss</code> by default.</param>
         public DirectorySink(string directory, int maxFiles = 10, bool reopenOnWrite = false, string dateFormat = DefaultDateFormat) :
-            this(new DirectoryInfo(directory), maxFiles, reopenOnWrite, dateFormat) {
-        }
+            this(new DirectoryInfo(directory), maxFiles, reopenOnWrite, dateFormat) {}
 
         /// <summary>
         /// Creates a new directory sink with the given settings.
@@ -35,6 +55,7 @@ namespace ExtremelySimpleLogger {
         /// <param name="dateFormat">The way the name of the current log file gets formatted. <code>yy-MM-dd_HH-mm-ss</code> by default.</param>
         public DirectorySink(DirectoryInfo directory, int maxFiles = 10, bool reopenOnWrite = false, string dateFormat = DefaultDateFormat) {
             this.reopenOnWrite = reopenOnWrite;
+            this.Directory = directory;
 
             try {
                 if (!directory.Exists)
@@ -44,16 +65,13 @@ namespace ExtremelySimpleLogger {
             }
 
             try {
-                // delete old files
-                var files = directory.GetFiles();
-                if (files.Length >= maxFiles) {
-                    // order files by their creation time so that older files are deleted first
-                    var ordered = files.OrderBy(f => f.CreationTime).ToList();
-                    while (ordered.Count >= maxFiles) {
-                        ordered[0].Delete();
-                        ordered.RemoveAt(0);
-                    }
+                // delete files in order of creation time so that older files are deleted first
+                var ordered = directory.EnumerateFiles().OrderBy(f => f.CreationTime).ToList();
+                while (ordered.Count >= maxFiles) {
+                    ordered[0].Delete();
+                    ordered.RemoveAt(0);
                 }
+                this.OldFiles = ordered.AsReadOnly();
             } catch (Exception e) {
                 throw new IOException($"Failed to delete old files in directory sink {directory}", e);
             }

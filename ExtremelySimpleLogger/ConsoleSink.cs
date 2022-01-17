@@ -9,9 +9,9 @@ namespace ExtremelySimpleLogger {
 
         /// <summary>
         /// The <see cref="ConsoleColors"/> that each <see cref="LogLevel"/> is displayed with using this console sink.
-        /// To edit and query this collection, use <see cref="SetColor"/> and <see cref="GetColor"/>.
+        /// To edit and query this collection, you can also use <see cref="SetColor"/> and <see cref="GetColor"/>.
         /// </summary>
-        protected readonly Dictionary<LogLevel, ConsoleColor> ConsoleColors = new Dictionary<LogLevel, ConsoleColor> {
+        public readonly Dictionary<LogLevel, ConsoleColor> ConsoleColors = new Dictionary<LogLevel, ConsoleColor> {
             {LogLevel.Warn, ConsoleColor.DarkYellow},
             {LogLevel.Error, ConsoleColor.DarkRed},
             {LogLevel.Fatal, ConsoleColor.DarkRed}

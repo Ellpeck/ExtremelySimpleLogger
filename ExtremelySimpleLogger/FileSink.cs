@@ -7,6 +7,16 @@ namespace ExtremelySimpleLogger {
     /// </summary>
     public class FileSink : Sink {
 
+        /// <summary>
+        /// The <see cref="FileInfo"/> that this sink is currently using as its destination.
+        /// </summary>
+        public FileInfo CurrentFile {
+            get {
+                lock (this.file)
+                    return this.file;
+            }
+        }
+        
         private const int OneGb = 1024 * 1024 * 1024;
         private readonly FileInfo file;
         private readonly StreamWriter writer;
@@ -20,8 +30,7 @@ namespace ExtremelySimpleLogger {
         /// <param name="reopenOnWrite">Whether this file sink should reopen the file every time it logs to it. If this is false, the file will be kept open by this sink.</param>
         /// <param name="fileSizeLimit">If <paramref name="append"/> is true, this property determines how big the log file has to be (in bytes) before it is deleted on startup. Defaults to 1gb.</param>
         public FileSink(string file, bool append, bool reopenOnWrite = false, int fileSizeLimit = OneGb) :
-            this(new FileInfo(file), append, reopenOnWrite, fileSizeLimit) {
-        }
+            this(new FileInfo(file), append, reopenOnWrite, fileSizeLimit) {}
 
         /// <summary>
         /// Creates a new file sink with the given settings.
