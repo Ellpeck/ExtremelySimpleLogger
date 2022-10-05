@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace ExtremelySimpleLogger {
     /// <summary>
@@ -18,11 +19,16 @@ namespace ExtremelySimpleLogger {
         /// </summary>
         public LogLevel MinimumLevel { get; set; } = LogLevel.Trace;
         /// <summary>
+        /// The <see cref="LogFormatter"/> with which log messages should be formatted by a <see cref="Sink"/> if its <see cref="Sink.Formatter"/> is <see langword="null"/>.
+        /// By default, <see cref="FormatDefault"/> is used.
+        /// </summary>
+        public LogFormatter DefaultFormatter { get; set; } = Logger.FormatDefault;
+        /// <summary>
         /// If this property is set to <code>false</code>, this logger will not log any messages.
         /// </summary>
         public bool IsEnabled { get; set; } = true;
         /// <summary>
-        /// The name of this logger. This name is used in <see cref="Sink.FormatDefault"/> by default.
+        /// The name of this logger. This name is used in <see cref="FormatDefault"/> by default.
         /// </summary>
         public string Name { get; set; }
 
@@ -97,5 +103,44 @@ namespace ExtremelySimpleLogger {
                 sink.Dispose();
         }
 
+        /// <summary>
+        /// The default formatter for logging messages, which is <see cref="DefaultFormatter"/>'s initial value.
+        /// By default, messages are laid out as follows:
+        /// <code>
+        /// [Date and time] [Logger name, if set] [Log level] Message
+        ///    Exception, if set
+        /// </code>
+        /// </summary>
+        /// <param name="logger">The logger that the message was passed to</param>
+        /// <param name="level">The importance level of this message</param>
+        /// <param name="message">The message</param>
+        /// <param name="e">An optional exception whose stack trace will be appended to the message</param>
+        /// <returns>A formatted string to log</returns>
+        public static string FormatDefault(Logger logger, LogLevel level, object message, Exception e = null) {
+            var builder = new StringBuilder();
+            // date
+            builder.Append($"[{DateTime.Now}] ");
+            // logger name
+            if (!string.IsNullOrEmpty(logger.Name))
+                builder.Append($"[{logger.Name}] ");
+            // log level
+            builder.Append($"[{level}] ");
+            // message
+            builder.Append(message);
+            // stack trace
+            if (e != null)
+                builder.Append($"\n{e}");
+            return builder.ToString();
+        }
+
     }
+
+    /// <summary>
+    /// A delegate method used by <see cref="Sink.Formatter"/> and <see cref="Logger.DefaultFormatter"/>.
+    /// </summary>
+    /// <param name="logger">The logger that the message was passed to</param>
+    /// <param name="level">The importance level of this message</param>
+    /// <param name="message">The message</param>
+    /// <param name="e">An optional exception whose stack trace will be appended to the message</param>
+    public delegate string LogFormatter(Logger logger, LogLevel level, object message, Exception e = null);
 }

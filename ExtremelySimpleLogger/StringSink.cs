@@ -31,7 +31,7 @@ namespace ExtremelySimpleLogger {
         private readonly StringBuilder builder = new StringBuilder();
 
         /// <summary>
-        /// Logs the given message, which has already been formatted using <see cref="Sink.Formatter"/>.
+        /// Logs the given message, which has already been formatted using <see cref="Sink.Formatter"/> or <see cref="Logger.DefaultFormatter"/>.
         /// </summary>
         /// <param name="logger">The logger that the message was passed to</param>
         /// <param name="level">The importance level of this message</param>
