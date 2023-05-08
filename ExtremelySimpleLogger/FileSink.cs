@@ -16,7 +16,7 @@ namespace ExtremelySimpleLogger {
                     return this.file;
             }
         }
-        
+
         private const int OneGb = 1024 * 1024 * 1024;
         private readonly FileInfo file;
         private readonly StreamWriter writer;
@@ -94,7 +94,7 @@ namespace ExtremelySimpleLogger {
 
         private StreamWriter Append() {
             try {
-                return this.file.AppendText();
+                return new StreamWriter(this.file.Open(FileMode.Append, FileAccess.Write, FileShare.ReadWrite));
             } catch (Exception e) {
                 throw new IOException($"Failed to append to file sink {this.file}", e);
             }

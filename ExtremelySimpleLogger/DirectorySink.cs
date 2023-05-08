@@ -114,7 +114,7 @@ namespace ExtremelySimpleLogger {
 
         private StreamWriter Append() {
             try {
-                return this.file.AppendText();
+                return new StreamWriter(this.file.Open(FileMode.Append, FileAccess.Write, FileShare.ReadWrite));
             } catch (Exception e) {
                 throw new IOException($"Failed to append to directory sink file {this.file}", e);
             }
