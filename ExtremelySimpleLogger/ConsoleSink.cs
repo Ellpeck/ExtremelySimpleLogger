@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace ExtremelySimpleLogger {
     /// <summary>
-    /// A <see cref="Sink"/> that writes log output to <see cref="Console.Out"/>.
+    /// A <see cref="Sink"/> that writes log output to <see cref="Console.Out"/> or <see cref="Console.Error"/>.
     /// </summary>
     public class ConsoleSink : Sink {
 
@@ -17,6 +18,15 @@ namespace ExtremelySimpleLogger {
             {LogLevel.Fatal, ConsoleColor.DarkRed}
         };
         private readonly object locker = new object();
+        private readonly TextWriter console;
+
+        /// <summary>
+        /// Creates a new console sink with the given settings.
+        /// </summary>
+        /// <param name="error">Whether to log to <see cref="Console.Error"/> instead of <see cref="Console.Out"/>.</param>
+        public ConsoleSink(bool error = false) {
+            this.console = error ? Console.Error : Console.Out;
+        }
 
         /// <summary>
         /// Sets the <see cref="ConsoleColor"/> that text with the given <see cref="LogLevel"/> should be displayed with.
@@ -57,7 +67,7 @@ namespace ExtremelySimpleLogger {
                 var color = this.GetColor(level);
                 if (color.HasValue)
                     Console.ForegroundColor = color.Value;
-                Console.WriteLine(s);
+                this.console.WriteLine(s);
                 if (color.HasValue)
                     Console.ResetColor();
             }
