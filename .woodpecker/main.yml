@@ -14,4 +14,4 @@ steps:
         branch: main
     image: mcr.microsoft.com/dotnet/sdk:8.0
     commands:
-      - dotnet nuget push -s https://nuget.ellpeck.de/v3/index.json **/*.nupkg -k $BAGET_KEY -n true
+      - dotnet nuget push -s https://nuget.ellpeck.de/v3/index.json **/*.nupkg -k "$BAGET_KEY" -n true
