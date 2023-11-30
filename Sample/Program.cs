@@ -39,6 +39,12 @@ namespace Sample {
             logger.Log(LogLevel.Trace, "This is a message that only the file sink will receive, since its minimum level is lower.");
             logger.Log(LogLevel.Info, "The program finished.");
 
+            // we can also use a writer to write to the log
+            Console.SetError(new LogWriter(logger, LogLevel.Warn));
+            Console.Error.WriteLine("This is an error written through serr! Oh no!");
+            Console.Error.Write("This is another error, but ");
+            Console.Error.WriteLine("written in multiple parts!");
+
             // Once we're done using the logger, we can dispose it so that our FileSink instances free their files
             logger.Dispose();
         }
