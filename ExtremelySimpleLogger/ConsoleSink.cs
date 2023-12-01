@@ -19,13 +19,16 @@ namespace ExtremelySimpleLogger {
             {LogLevel.Fatal, ConsoleColor.DarkRed}
         };
         private readonly TextWriter console;
+        private readonly bool useAnsiCodes;
 
         /// <summary>
         /// Creates a new console sink with the given settings.
         /// </summary>
         /// <param name="error">Whether to log to <see cref="Console.Error"/> instead of <see cref="Console.Out"/>.</param>
-        public ConsoleSink(bool error = false) {
+        /// <param name="useAnsiCodes">Whether to wrap log output text in ANSI escape codes using <see cref="Extensions.WrapAnsiCode"/> instead of using the <see cref="Console.ForegroundColor"/> and <see cref="Console.ResetColor"/>. This may work better on some terminals.</param>
+        public ConsoleSink(bool error = false, bool useAnsiCodes = false) {
             this.console = error ? Console.Error : Console.Out;
+            this.useAnsiCodes = useAnsiCodes;
         }
 
         /// <summary>
@@ -65,10 +68,15 @@ namespace ExtremelySimpleLogger {
         protected override void Log(Logger logger, LogLevel level, string s) {
             lock (this.console) {
                 var color = this.GetColor(level);
-                if (color.HasValue)
-                    Console.ForegroundColor = color.Value;
+                if (color.HasValue) {
+                    if (this.useAnsiCodes) {
+                        s = s.WrapAnsiCode(color.Value);
+                    } else {
+                        Console.ForegroundColor = color.Value;
+                    }
+                }
                 this.console.WriteLine(s);
-                if (color.HasValue)
+                if (color.HasValue && !this.useAnsiCodes)
                     Console.ResetColor();
             }
         }
