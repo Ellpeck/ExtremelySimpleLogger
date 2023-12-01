@@ -5,6 +5,7 @@ using System.IO;
 namespace ExtremelySimpleLogger {
     /// <summary>
     /// A <see cref="Sink"/> that writes log output to <see cref="Console.Out"/> or <see cref="Console.Error"/>.
+    /// This class is a variation of the <see cref="WriterSink"/>.
     /// </summary>
     public class ConsoleSink : Sink {
 
@@ -17,7 +18,6 @@ namespace ExtremelySimpleLogger {
             {LogLevel.Error, ConsoleColor.DarkRed},
             {LogLevel.Fatal, ConsoleColor.DarkRed}
         };
-        private readonly object locker = new object();
         private readonly TextWriter console;
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace ExtremelySimpleLogger {
         /// <param name="level">The importance level of this message</param>
         /// <param name="s">The message to log</param>
         protected override void Log(Logger logger, LogLevel level, string s) {
-            lock (this.locker) {
+            lock (this.console) {
                 var color = this.GetColor(level);
                 if (color.HasValue)
                     Console.ForegroundColor = color.Value;
